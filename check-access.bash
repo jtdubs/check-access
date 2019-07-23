@@ -1,45 +1,45 @@
-#!/bin/sh
+#!/bin/bash
 
 # exit on failed commands or undefined variables 
-set -eu
+set -euo pipefail
 
 # make a temp folder for output files
 OUTDIR=$(mktemp -d)
 
 
 #
-# log(LOG_MSG) - print a message and log it with a timestamp
+# log(MSG) - print a message and log it with a timestamp
 #
-# LOG_MSG - the message to print
+# MSG - the message to print
 #
 log()
 {
-  LOG_TIME=$(date)
-  LOG_MSG=$1
+  local TIME=$(date)
+  local MSG=$1
 
-  echo $LOG_MSG
-  echo $LOG_TIME: $LOG_MSG >> "$OUTDIR/output.log"
+  echo $MSG
+  echo $TIME: $MSG >> "$OUTDIR/output.log"
 }
 
 
 #
-# print_entry(PRINT_FILE) - print info about a file
+# print_entry(FILE) - print info about a file
 #
-# PRINT_FILE - the file to print info about
+# FILE - the file to print info about
 #
 print_entry()
 {
-  PRINT_FILE=$1
+  local FILE=$1
 
   # get the file's permissions, user, group and name
-  FILE_INFO=$(stat --format="%A,%U,%G,%n," "$PRINT_FILE")
+  local FILE_INFO=$(stat --format="%A,%U,%G,%n," "$FILE")
 
   # if it's a symlink
-  if [ -L "$PRINT_FILE" ]
+  if [ -L "$FILE" ]
   then
 	# append the target of the symlink
-	LINK_TARGET=$(readlink -f $PRINT_FILE)
-	FILE_INFO="$FILE_INFO$LINK_TARGET"
+	local TARGET=$(readlink -f $FILE)
+	FILE_INFO="$FILE_INFO$TARGET"
   fi
 
   echo "$FILE_INFO"
