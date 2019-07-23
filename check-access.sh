@@ -56,7 +56,7 @@ set +u
 # ensure userid is specified
 if [ -z "$1" ]
 then
-  log "Usage: $0 [userid] [root]"
+  log "Usage: $0 [userid] [directory]"
   exit 1
 fi
 
